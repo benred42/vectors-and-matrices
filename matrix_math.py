@@ -1,4 +1,5 @@
 import math
+import operator
 
 
 class ShapeException(Exception):
@@ -15,12 +16,19 @@ def shape(a_list):
 ###############################################################################
 
 
-def vector_add(vector1, vector2):
-    if shape(vector1) != shape(vector2):
+def list_operator(list1, list2, operation):
+    if shape(list1) != shape(list2):
         raise ShapeException
 
-    new_vector = [vector1[index] + vector2[index]
-                  for index in range(len(vector1))]
+    new_list = [operation(list1[index], list2[index])
+                for index in range(len(list1))]
+
+    return new_list
+###############################################################################
+
+
+def vector_add(vector1, vector2):
+    new_vector = list_operator(vector1, vector2, operator.add)
 
     return new_vector
 
@@ -28,11 +36,7 @@ def vector_add(vector1, vector2):
 
 
 def vector_sub(vector1, vector2):
-    if shape(vector1) != shape(vector2):
-        raise ShapeException
-
-    new_vector = [vector1[index] - vector2[index]
-                  for index in range(len(vector1))]
+    new_vector = list_operator(vector1, vector2, operator.sub)
 
     return new_vector
 
@@ -58,11 +62,7 @@ def vector_sum(*args):
 
 
 def dot(vector1, vector2):
-    if shape(vector1) != shape(vector2):
-        raise ShapeException
-
-    new_scalar = sum([vector1[index] * vector2[index]
-                      for index in range(len(vector1))])
+    new_scalar = sum(list_operator(vector1, vector2, operator.mul))
 
     return new_scalar
 
